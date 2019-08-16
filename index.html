@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <title>前端搜索引擎组件</title>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <h1 id="%e5%89%8d%e7%ab%af%e6%90%9c%e7%b4%a2%e5%bc%95%e6%93%8e%e7%bb%84%e4%bb%b6">前端搜索引擎组件</h1>
+    <h2 id="%e4%bd%bf%e7%94%a8%e7%8e%af%e5%a2%83">使用环境</h2>
+    <p>油猴子插件</p>
+    <h2 id="%e6%b3%a8%e5%86%8c%e7%9a%84%e6%8e%a7%e5%88%b6%e5%8f%b0-api">注册的控制台 API：</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>api</th>
+                <th>type</th>
+                <th>effect</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>engine</td>
+                <td>object</td>
+                <td>显示所有可用的搜索引擎，使用 <code>engine.load()</code>可初始化引擎</td>
+            </tr>
+            <tr>
+                <td>baidu / github / maven / ...</td>
+                <td>function</td>
+                <td>args1 = 关键字，args2 = 是否在新窗口打开，如 <code>github('mybatis', true)</code></td>
+            </tr>
+        </tbody>
+    </table>
+    <p>显示所有可用的搜索引擎</p>
+    <pre><code class="language-javascript"><div><span class="hljs-comment">// 向控制台输入 engine，显示结果如下</span>
+{
+    <span class="hljs-attr">baidu</span>: <span class="hljs-string">"https://www.baidu.com/s?wd=%s"</span>,
+    <span class="hljs-attr">extension</span>: <span class="hljs-string">"https://chrome.google.com/webstore/search/%s?hl=zh-CN"</span>,
+    <span class="hljs-attr">github</span>: <span class="hljs-string">"https://github.com/search?q=%s"</span>,
+    <span class="hljs-attr">maven</span>: <span class="hljs-string">"https://mvnrepository.com/search?q=%s"</span>,
+    <span class="hljs-attr">douban</span>: <span class="hljs-string">"https://www.douban.com/search?q=%s"</span>,
+    <span class="hljs-attr">load</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">/* ... */</span> }
+}
+</div></code></pre>
+    <p>在控制台使用搜索引擎，以百度为例</p>
+    <pre><code class="language-javascript"><div>baidu()                 <span class="hljs-comment">// 打开百度搜索首页</span>
+baidu(<span class="hljs-literal">true</span>)             <span class="hljs-comment">// 在新窗口打开百度搜索</span>
+baidu(<span class="hljs-string">'hello world'</span>)    <span class="hljs-comment">// 在当前页打开百度搜索，关键字为 ‘hello world’</span>
+baidu(<span class="hljs-string">'hello world'</span>)    <span class="hljs-comment">// 在新窗口搜索</span>
+</div></code></pre>
+    <p>自定义搜索引擎</p>
+    <pre><code class="language-javascript"><div><span class="hljs-comment">// 一次性，页面重载后会被重置</span>
+engine.bing = <span class="hljs-string">'https://cn.bing.com/search?q=%s'</span>
+engine.load()
+bing(<span class="hljs-string">'hello world'</span>)
+
+<span class="hljs-comment">// 永久性</span>
+<span class="hljs-comment">// 直接修改源码的 engine 变量</span>
+</div></code></pre>
+    <h2 id="%e5%8f%af%e8%a7%86%e5%8c%96%e7%bb%84%e4%bb%b6">可视化组件</h2>
+    <ul>
+        <li>使用 <code>ctrl + shift + f</code> 快捷键可显示或隐藏搜索框</li>
+        <li>使用 <code>esc</code> 快捷键可隐藏搜索框</li>
+        <li>在搜索框中使用 <code>tab</code> 可切换搜索引擎，使用 <code>shift + tab</code> 可向前切换，使用 <code>enter</code> 可执行搜索，搜索时默认打开一个新的窗口
+        </li>
+    </ul>
+    <h2 id="%e5%85%b6%e4%bb%96">其他</h2>
+    <ul>
+        <li>提供了一个超链接的变量 url，可根据需要自定义</li>
+    </ul>
+    <pre><code class="language-javascript"><div><span class="hljs-comment">// 向控制台输入 url，显示结果如下</span>
+{
+    <span class="hljs-attr">github</span>: <span class="hljs-string">"https://github.com/free-myself"</span>,
+    <span class="hljs-attr">spring_cloud</span>: <span class="hljs-string">"https://www.fangzhipeng.com/spring-cloud.html"</span>,
+    <span class="hljs-attr">localhost</span>: {
+        <span class="hljs-attr">url</span>: <span class="hljs-string">"http://localhost"</span>,
+        <span class="hljs-attr">port</span>: [<span class="hljs-number">80</span>, <span class="hljs-number">4000</span>, <span class="hljs-number">8080</span>]
+    }
+}
+</div></code></pre>
+
+</body>
+<script src="./search.js"></script>
+
+</html>
